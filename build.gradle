@@ -1,99 +1,114 @@
-buildscript {                        // ¶¨Òå½Å±¾Ê¹ÓÃ×ÊÔ´
-    apply from: 'dependencies.gradle' // ÒıÈëËùĞèÒªµÄÒÀÀµ¿âÎÄ¼ş
-    repositories {                        // ½Å±¾×ÊÔ´²Ö¿â
+buildscript {                        // å®šä¹‰è„šæœ¬ä½¿ç”¨èµ„æº
+    apply from: 'dependencies.gradle' // å¼•å…¥æ‰€éœ€è¦çš„ä¾èµ–åº“æ–‡ä»¶
+    repositories {                        // è„šæœ¬èµ„æºä»“åº“
         maven { url 'https://maven.aliyun.com/repository/public' }
     }
-    dependencies {                        // ÒÀÀµ¿â
-        classpath libraries.'spring-boot-gradle-plugin' // SpringBoot²å¼ş
+    dependencies {                        // ä¾èµ–åº“
+        classpath libraries.'spring-boot-gradle-plugin' // SpringBootæ’ä»¶
     }
 }
-group project_group 	// ×éÖ¯Ãû³Æ
-version project_version // ÏîÄ¿°æ±¾
+group project_group 	// ç»„ç»‡åç§°
+version project_version // é¡¹ç›®ç‰ˆæœ¬
 
-apply from: 'dependencies.gradle' // µ¼ÈëÒÀÀµÅäÖÃ
-def env = System.getProperty("env") ?: 'dev' 	// »ñÈ¡env»·¾³ÊôĞÔ
-subprojects {   					// ÅäÖÃ×ÓÏîÄ¿
-    apply plugin: 'java' 				// ×ÓÄ£¿é²å¼ş
-    apply plugin: 'org.springframework.boot' 	// ÒıÈëSpringBoot²å¼ş
-    apply plugin: 'io.spring.dependency-management'	// °æ±¾ºÅ¹ÜÀí
-    sourceCompatibility = project_jdk   		// Ô´´úÂë°æ±¾
-    targetCompatibility = project_jdk   		// Éú³ÉÀà°æ±¾
-    repositories {  				// ÅäÖÃGradle²Ö¿â
+apply from: 'dependencies.gradle' // å¯¼å…¥ä¾èµ–é…ç½®
+def env = System.getProperty("env") ?: 'dev' 	// è·å–envç¯å¢ƒå±æ€§
+subprojects {   					// é…ç½®å­é¡¹ç›®
+    apply plugin: 'java' 				// å­æ¨¡å—æ’ä»¶
+    apply plugin: 'org.springframework.boot' 	// å¼•å…¥SpringBootæ’ä»¶
+    apply plugin: 'io.spring.dependency-management'	// ç‰ˆæœ¬å·ç®¡ç†
+    sourceCompatibility = project_jdk   		// æºä»£ç ç‰ˆæœ¬
+    targetCompatibility = project_jdk   		// ç”Ÿæˆç±»ç‰ˆæœ¬
+    repositories {  				// é…ç½®Gradleä»“åº“
         mavenLocal()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
         jcenter()
     }
-    dependencyManagement {// °æ±¾¿ØÖÆ²å¼ş
+    dependencyManagement {// ç‰ˆæœ¬æ§åˆ¶æ’ä»¶
         imports {
-            mavenBom libraries.'spring-cloud-dependencies' // SpringCloudÒÀÀµ¹ÜÀí
-            mavenBom libraries.'spring-cloud-alibaba-dependencies' // SpringCloudAlibabaÒÀÀµ¹ÜÀí
+            mavenBom libraries.'spring-cloud-dependencies' // SpringCloudä¾èµ–ç®¡ç†
+            mavenBom libraries.'spring-cloud-alibaba-dependencies' // SpringCloudAlibabaä¾èµ–ç®¡ç†
         }
     }
-    dependencies {  				// ¹«¹²ÒÀÀµ¿â¹ÜÀí
-        compile('org.springframework.boot:spring-boot-devtools') // ÏîÄ¿ÈÈ²¿Êğ
-        // ÒÔÏÂÎª²âÊÔ»·¾³µÄÏà¹ØÒÀÀµÅäÖÃ
+    dependencies {  				// å…¬å…±ä¾èµ–åº“ç®¡ç†
+        compile('org.springframework.boot:spring-boot-devtools') // é¡¹ç›®çƒ­éƒ¨ç½²
+        // ä»¥ä¸‹ä¸ºæµ‹è¯•ç¯å¢ƒçš„ç›¸å…³ä¾èµ–é…ç½®
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
-            exclude group: 'junit', module: 'junit' // ÒÆ³ıJunit4
+            exclude group: 'junit', module: 'junit' // ç§»é™¤Junit4
         }
-        testImplementation(enforcedPlatform(libraries.'junit-bom')) // °ó¶¨ÎªJUnit5ÔËĞĞ
-        testImplementation(libraries.'junit-platform-commons') // Junit5²âÊÔ×é¼ş
-        testImplementation(libraries.'junit-platform-engine') // Junit5²âÊÔ×é¼ş
-        testImplementation(libraries.'junit-jupiter-api') // Junit5²âÊÔ×é¼ş
-        testImplementation(libraries.'junit-vintage-engine') // Junit5²âÊÔ×é¼ş
-        testImplementation(libraries.'junit-jupiter-engine') // Junit5²âÊÔ×é¼ş
-        testImplementation(libraries.'junit-platform-launcher') // Junit5²âÊÔ×é¼ş
-        // ÒÔÏÂÎªLombok²å¼şµÄÏà¹ØÒÀÀµÅäÖÃ
-        compileOnly(libraries.'lombok') // ±àÒëÊ±ÉúĞ§
-        annotationProcessor(libraries.'lombok') // ×¢½âÊ±ÉúĞ§
+        testImplementation(enforcedPlatform(libraries.'junit-bom')) // ç»‘å®šä¸ºJUnit5è¿è¡Œ
+        testImplementation(libraries.'junit-platform-commons') // Junit5æµ‹è¯•ç»„ä»¶
+        testImplementation(libraries.'junit-platform-engine') // Junit5æµ‹è¯•ç»„ä»¶
+        testImplementation(libraries.'junit-jupiter-api') // Junit5æµ‹è¯•ç»„ä»¶
+        testImplementation(libraries.'junit-vintage-engine') // Junit5æµ‹è¯•ç»„ä»¶
+        testImplementation(libraries.'junit-jupiter-engine') // Junit5æµ‹è¯•ç»„ä»¶
+        testImplementation(libraries.'junit-platform-launcher') // Junit5æµ‹è¯•ç»„ä»¶
+        // ä»¥ä¸‹ä¸ºLombokæ’ä»¶çš„ç›¸å…³ä¾èµ–é…ç½®
+        compileOnly(libraries.'lombok') // ç¼–è¯‘æ—¶ç”Ÿæ•ˆ
+        annotationProcessor(libraries.'lombok') // æ³¨è§£æ—¶ç”Ÿæ•ˆ
     }
-    sourceSets {    				// Ô´´úÂëÄ¿Â¼ÅäÖÃ
-        main { 					// main¼°Ïà¹Ø×ÓÄ¿Â¼ÅäÖÃ
+    sourceSets {    				// æºä»£ç ç›®å½•é…ç½®
+        main { 					// mainåŠç›¸å…³å­ç›®å½•é…ç½®
             java { srcDirs = ['src/main/java'] }
             resources { srcDirs = ['src/main/resources', "src/main/profiles/$env"] }
         }
-        test { 					// test¼°Ïà¹Ø×ÓÄ¿Â¼ÅäÖÃ
+        test { 					// teståŠç›¸å…³å­ç›®å½•é…ç½®
             java { srcDirs = ['src/test/java'] }
             resources { srcDirs = ['src/test/resources'] }
         }
     }
-    test {  					// ÅäÖÃ²âÊÔÈÎÎñ
-        useJUnitPlatform()				// Ê¹ÓÃJUnit²âÊÔÆ½Ì¨
+    test {  					// é…ç½®æµ‹è¯•ä»»åŠ¡
+        useJUnitPlatform()				// ä½¿ç”¨JUnitæµ‹è¯•å¹³å°
     }
-    task sourceJar(type: Jar, dependsOn: classes) { // Ô´´úÂëµÄ´ò°üÈÎÎñ
-        archiveClassifier = 'sources' 		// ÉèÖÃÎÄ¼şµÄºó×º
-        from sourceSets.main.allSource 		// ËùÓĞÔ´´úÂëµÄ¶ÁÈ¡Â·¾¶
+    task sourceJar(type: Jar, dependsOn: classes) { // æºä»£ç çš„æ‰“åŒ…ä»»åŠ¡
+        archiveClassifier = 'sources' 		// è®¾ç½®æ–‡ä»¶çš„åç¼€
+        from sourceSets.main.allSource 		// æ‰€æœ‰æºä»£ç çš„è¯»å–è·¯å¾„
     }
-    task javadocTask(type: Javadoc) { 		// JavaDocÎÄµµ´ò°üÈÎÎñ
-        options.encoding = 'UTF-8' 			// ÉèÖÃÎÄ¼ş±àÂë
-        source = sourceSets.main.allJava 		// ¶¨ÒåËùÓĞµÄJavaÔ´´úÂë
+    task javadocTask(type: Javadoc) { 		// JavaDocæ–‡æ¡£æ‰“åŒ…ä»»åŠ¡
+        options.encoding = 'UTF-8' 			// è®¾ç½®æ–‡ä»¶ç¼–ç 
+        source = sourceSets.main.allJava 		// å®šä¹‰æ‰€æœ‰çš„Javaæºä»£ç 
     }
-    task javadocJar(type: Jar, dependsOn: javadocTask) { // ÏÈÉú³ÉJavaDocÔÙ´ò°ü
-        archiveClassifier = 'javadoc' 		// ÎÄ¼ş±ê¼ÇÀàĞÍ
-        from javadocTask.destinationDir 		// Í¨¹ıJavadocTaskÈÎÎñÖĞÕÒµ½Ä¿±êÂ·¾¶
+    task javadocJar(type: Jar, dependsOn: javadocTask) { // å…ˆç”ŸæˆJavaDocå†æ‰“åŒ…
+        archiveClassifier = 'javadoc' 		// æ–‡ä»¶æ ‡è®°ç±»å‹
+        from javadocTask.destinationDir 		// é€šè¿‡JavadocTaskä»»åŠ¡ä¸­æ‰¾åˆ°ç›®æ ‡è·¯å¾„
     }
-    tasks.withType(Javadoc) {   			// ÎÄµµ±àÂëÅäÖÃ
-        options.encoding = 'UTF-8' 			// ¶¨Òå±àÂë
+    tasks.withType(Javadoc) {   			// æ–‡æ¡£ç¼–ç é…ç½®
+        options.encoding = 'UTF-8' 			// å®šä¹‰ç¼–ç 
     }
-    tasks.withType(JavaCompile) {   		// ±àÒë±àÂëÅäÖÃ
-        options.encoding = 'UTF-8' 			// ¶¨Òå±àÂë
+    tasks.withType(JavaCompile) {   		// ç¼–è¯‘ç¼–ç é…ç½®
+        options.encoding = 'UTF-8' 			// å®šä¹‰ç¼–ç 
     }
-    artifacts { 					// ×îÖÕµÄ´ò°üµÄ²Ù×÷ÈÎÎñ
-        archives sourceJar 			// Ô´´úÂë´ò°ü
-        archives javadocJar 			// javadoc´ò°ü
+    artifacts { 					// æœ€ç»ˆçš„æ‰“åŒ…çš„æ“ä½œä»»åŠ¡
+        archives sourceJar 			// æºä»£ç æ‰“åŒ…
+        archives javadocJar 			// javadocæ‰“åŒ…
     }
-    gradle.taskGraph.whenReady {    		// ÔÚËùÓĞµÄ²Ù×÷×¼±¸ºÃºó´¥·¢
-        tasks.each { task ->    			// ÕÒ³öËùÓĞµÄÈÎÎñ
-            if (task.name.contains('test')) {   	// Èç¹û·¢ÏÖÓĞtestÈÎÎñ
-                // Èç¹û½«enabledÉèÖÃÎªtrue±íÊ¾ÒªÖ´ĞĞ²âÊÔÈÎÎñ£¬Èç¹ûÉèÖÃÎªfalse±íÊ¾²»Ö´ĞĞ²âÊÔÈÎÎñ
+    gradle.taskGraph.whenReady {    		// åœ¨æ‰€æœ‰çš„æ“ä½œå‡†å¤‡å¥½åè§¦å‘
+        tasks.each { task ->    			// æ‰¾å‡ºæ‰€æœ‰çš„ä»»åŠ¡
+            if (task.name.contains('test')) {   	// å¦‚æœå‘ç°æœ‰testä»»åŠ¡
+                // å¦‚æœå°†enabledè®¾ç½®ä¸ºtrueè¡¨ç¤ºè¦æ‰§è¡Œæµ‹è¯•ä»»åŠ¡ï¼Œå¦‚æœè®¾ç½®ä¸ºfalseè¡¨ç¤ºä¸æ‰§è¡Œæµ‹è¯•ä»»åŠ¡
                 task.enabled = true
             }
         }
     }
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'// ±àÂëÅäÖÃ
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'// ç¼–ç é…ç½®
 }
-project(":common-api") { // ½øĞĞ×ÓÄ£¿éµÄÅäÖÃ
-    dependencies { // ÅäÖÃÄ£¿éËùĞèÒªµÄÒÀÀµ¿â
-        compile("org.springframework.boot:spring-boot-starter-web") // SpringBoot ÒÀÀµ
+project(":common-api") {    // è¿›è¡Œå­æ¨¡å—çš„é…ç½®
+    dependencies { // é…ç½®æ¨¡å—æ‰€éœ€è¦çš„ä¾èµ–åº“
+        compile("org.springframework.boot:spring-boot-starter-web") // SpringBootä¾èµ–
     }
 }
+project(":provider-dept-8001") {    // éƒ¨é—¨å¾®æœåŠ¡
+    dependencies {
+        implementation(project(":common-api")) // å¯¼å…¥å…¬å…±çš„å­æ¨¡å—
+        implementation(libraries.'mybatis-plus-boot-starter')
+        implementation(libraries.'mysql-connector-java')
+        implementation(libraries.'druid')
+        implementation(libraries.'springfox-boot-starter')
+    }
+}
+project(":consumer-springboot-80") { // æ¶ˆè´¹ç«¯æ¨¡å—
+    dependencies {
+        implementation(project(":common-api")) // å¯¼å…¥å…¬å…±çš„å­æ¨¡å—
+    }
+}
+

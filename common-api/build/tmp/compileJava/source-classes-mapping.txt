@@ -1,6 +1,0 @@
-com/yootk/common/dto/DeptDTO.java
- com.yootk.common.dto.DeptDTO
-com/yootk/service/IDeptService.java
- com.yootk.service.IDeptService
-com/yootk/common/util/DeepBeanUtils.java
- com.yootk.common.util.DeepBeanUtils
